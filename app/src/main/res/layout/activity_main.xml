@@ -9,25 +9,49 @@
     >
 
     <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/et_user_input"
         android:id="@+id/rv_conversation"
-        >
+        android:layout_width="match_parent"
+        android:layout_height="678dp"
+        android:layout_above="@+id/et_user_input"
+        android:layout_marginBottom="-9dp">
 
     </android.support.v7.widget.RecyclerView>
 
+
     <EditText
+        android:paddingHorizontal="9dp"
         android:id="@+id/et_user_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:gravity="bottom"
         android:layout_margin="10dp"
-        android:padding="10dp"
+        android:hint="Ask Baemax"
+        android:paddingVertical="5dp"
+        android:layout_toLeftOf="@+id/imageButton"
+        android:layout_alignParentBottom="true"
         android:fontFamily="sans-serif-condensed"
         android:textSize="24sp"
+        android:imeActionId="4"
+        android:imeOptions="actionSend"
         android:background="@drawable/user_input_bubble"
         android:elevation="5dp"/>
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="44dp"
+        android:layout_height="43dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="9dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/round_corners"
+        android:tint="@color/colorPrimaryDark"
+        app:srcCompat="@android:drawable/ic_menu_send"
+
+        />
+
+
+
 
 
 

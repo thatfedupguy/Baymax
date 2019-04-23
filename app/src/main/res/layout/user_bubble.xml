@@ -6,12 +6,14 @@
     >
 
     <TextView
+        android:id="@+id/tv_textMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/user_bubble"
-        android:textSize="24sp"
-        android:layout_margin="12dp"
-        android:padding="10dp"
+        android:textSize="20sp"
+        android:layout_margin="8dp"
+        android:paddingVertical="5dp"
+        android:paddingHorizontal="9dp"
         android:hint="Hello, I am Tushar"
         android:fontFamily="sans-serif-condensed"
         android:layout_alignParentRight="true"
