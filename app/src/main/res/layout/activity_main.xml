@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:gravity="bottom"
         android:layout_margin="10dp"
-        android:hint="Ask Baemax"
+        android:hint="Ask Baymax"
         android:paddingVertical="5dp"
         android:layout_toLeftOf="@+id/imageButton"
         android:layout_alignParentBottom="true"
@@ -50,9 +50,17 @@
 
         />
 
-
-
-
+    <ImageButton
+        android:id="@+id/imageButtonMic"
+        android:layout_width="44dp"
+        android:layout_height="43dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="9dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/round_corners"
+        android:tint="@color/colorPrimaryDark"
+        app:srcCompat="@drawable/microphone_control" />
 
 
 </RelativeLayout>

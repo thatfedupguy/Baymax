@@ -1,6 +1,5 @@
-package am.tk.baemax;
+package am.tk.baymax;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -30,7 +29,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.CustomVi
         if(responseMessageList.get(position).isUser){
             return R.layout.user_bubble;
         }
-        return R.layout.baemax_bubble;
+        return R.layout.baymax_bubble;
     }
     @NonNull
     @Override

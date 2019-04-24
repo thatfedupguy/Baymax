@@ -1,24 +1,25 @@
-package am.tk.baemax;
+package am.tk.baymax;
 
-import android.accounts.AccountManagerFuture;
-import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.KeyEvent;
+import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import ai.api.AIDataService;
 import ai.api.AIListener;
-import ai.api.AIServiceContext;
 import ai.api.AIServiceException;
 import ai.api.android.AIConfiguration;
 import ai.api.android.AIService;
@@ -28,22 +29,43 @@ import ai.api.model.AIResponse;
 import ai.api.model.Result;
 
 public class MainActivity extends AppCompatActivity implements AIListener {
+    public static final String TAG = "MainActivity";
+    TextToSpeech mtts;
+    private static final int REQUEST_CODE_SPECCH_INPUT = 100;
     EditText et_user_input;
     RecyclerView rv_conversation;
     ImageButton imageButton;
+    ImageButton imageButtonMic;
     ArrayList<ResponseMessage> responseMessageList;
     MessageAdapter messageAdapter;
+    private String result1;
+    final AIConfiguration config = new AIConfiguration("3868afeaf91c4e36b981ef82aa2fea2b",
+            AIConfiguration.SupportedLanguages.English,
+            AIConfiguration.RecognitionEngine.System);
+    AIService aiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final AIConfiguration config = new AIConfiguration("3868afeaf91c4e36b981ef82aa2fea2b",
-                AIConfiguration.SupportedLanguages.English,
-                AIConfiguration.RecognitionEngine.System);
 
-        final AIService aiService = AIService.getService(this, config);
+        mtts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status == TextToSpeech.SUCCESS){
+                    int result = mtts.setLanguage(Locale.ENGLISH);
+                    if(result == TextToSpeech.LANG_MISSING_DATA
+                    || result == TextToSpeech.LANG_NOT_SUPPORTED){
+                        Log.d(TAG, "onInit: Language not supported");
+                    }else{
+                         // Nothing
+                    }
+                }else{
+                    Log.d(TAG, "onInit: Unable to Speak");
+                }
+            }
+        });
 
-
+        aiService = AIService.getService(this, config);
 
        aiService.setListener(this);
 
@@ -53,12 +75,25 @@ public class MainActivity extends AppCompatActivity implements AIListener {
 
         setContentView(R.layout.activity_main);
         et_user_input = findViewById(R.id.et_user_input);
+        imageButtonMic =findViewById(R.id.imageButtonMic);
         rv_conversation = findViewById(R.id.rv_conversation);
         imageButton = findViewById(R.id.imageButton);
         responseMessageList = new ArrayList<>();
         messageAdapter = new MessageAdapter(responseMessageList);
         rv_conversation.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         rv_conversation.setAdapter(messageAdapter);
+        et_user_input.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageButtonMic.setVisibility(View.INVISIBLE);
+            }
+        });
+        imageButtonMic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                speak();
+            }
+        });
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,11 +139,40 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                             }
                         };
                 task.execute(aiRequest);
+                imageButtonMic.setVisibility(View.VISIBLE);
             }
         });
 
 
     }
+
+    private void speak() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say Something");
+        try {
+            startActivityForResult(intent, REQUEST_CODE_SPECCH_INPUT);
+        }catch (Exception e){
+            Toast.makeText(this, "Did not get what you say", Toast.LENGTH_SHORT);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode){
+
+            case REQUEST_CODE_SPECCH_INPUT:{
+                ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                et_user_input.setText(result.get(0));
+
+            }
+        }
+    }
+
     public boolean isVisible(){
         LinearLayoutManager layoutManager = (LinearLayoutManager)rv_conversation.getLayoutManager();
         int positionOfLastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition();
@@ -125,6 +189,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         Result result1 = result.getResult();
         ResponseMessage responseMessage = new ResponseMessage(result1.getFulfillment().getSpeech(), false);
         responseMessageList.add(responseMessage);
+        mtts.speak(responseMessage.message, TextToSpeech.QUEUE_FLUSH, null);
         messageAdapter.notifyDataSetChanged();
         if(!isVisible()){
             rv_conversation.smoothScrollToPosition(messageAdapter.getItemCount()-1);
@@ -144,6 +209,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
 
     @Override
     public void onListeningStarted() {
+        aiService.startListening();
 
     }
 

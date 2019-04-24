@@ -1,4 +1,4 @@
-package am.tk.baemax;
+package am.tk.baymax;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

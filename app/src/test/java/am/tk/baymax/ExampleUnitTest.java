@@ -1,4 +1,4 @@
-package am.tk.baemax;
+package am.tk.baymax;
 
 import org.junit.Test;
 

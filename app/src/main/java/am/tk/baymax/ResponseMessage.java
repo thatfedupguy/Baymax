@@ -1,4 +1,4 @@
-package am.tk.baemax;
+package am.tk.baymax;
 
 public class ResponseMessage {
     String message;
