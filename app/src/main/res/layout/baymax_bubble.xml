@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/baymax"
+        android:id="@+id/baemax_imageView"
+        />
+
     <TextView
+        android:layout_toRightOf="@id/baemax_imageView"
         android:paddingHorizontal="9dp"
         android:id="@+id/tv_textMessage"
         android:layout_width="wrap_content"
@@ -18,4 +29,4 @@
         android:elevation="5dp"
         />
 
-</RelativeLayout>
+</LinearLayout>

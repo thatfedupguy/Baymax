@@ -19,6 +19,8 @@ android {
 }
 
 dependencies {
+
+
     implementation 'ai.api:libai:1.6.12'
     implementation 'ai.api:sdk:2.0.7@aar'
     implementation fileTree(dir: 'libs', include: ['*.jar'])

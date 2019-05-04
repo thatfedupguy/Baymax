@@ -1,6 +1,7 @@
 package am.tk.baymax;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
     ArrayList<ResponseMessage> responseMessageList;
     MessageAdapter messageAdapter;
     private String result1;
+
     final AIConfiguration config = new AIConfiguration("3868afeaf91c4e36b981ef82aa2fea2b",
             AIConfiguration.SupportedLanguages.English,
             AIConfiguration.RecognitionEngine.System);
